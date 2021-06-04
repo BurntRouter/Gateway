@@ -37,6 +37,14 @@ public class AccountManager {
         preparedStatement.close();
     }
 
+    public void updateBalance(String userid, int change) throws SQLException {
+        PreparedStatement preparedStatement = this.mysql.getStatement("UPDATE users SET balance = balance + ? WHERE userid = ?");
+        preparedStatement.setInt(1, change);
+        preparedStatement.setString(2, userid);
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
+    }
+
     public MySQL getMysql() {
         return mysql;
     }

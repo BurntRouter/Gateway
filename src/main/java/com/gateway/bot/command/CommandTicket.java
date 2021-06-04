@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class CommandTicket extends Command {
     private AccountManager accountManager;
@@ -19,9 +20,15 @@ public class CommandTicket extends Command {
 
     @Override
     public void onUse(Message query, List<String> arguments, CommandManager commandManager) throws Exception {
+        String userid = Objects.requireNonNull(query.getMember()).getId();
+        String name = arguments.get(1);
+        int bounty = Integer.parseInt(arguments.get(2));
+        int balance = this.accountManager.getBalance(userid);
         if(arguments.size() == 3) {
-            if(Integer.valueOf(arguments.get(2)) > this.accountManager.getBalance(query.getMember().getId()) && Integer.valueOf(arguments.get(2)) > 1) {
-                ChannelAction<TextChannel> channel = query.getGuild().createTextChannel(arguments.get(1), query.getGuild().getCategoryById("849658284490752041"));
+            if(bounty > balance && Integer.parseInt(arguments.get(2)) > 1) {
+                this.accountManager.openTicket(userid, name, bounty);
+                this.accountManager.updateBalance(userid, -bounty);
+                ChannelAction<TextChannel> channel = query.getGuild().createTextChannel(name, query.getGuild().getCategoryById("849658284490752041"));
                 channel.addMemberPermissionOverride(query.getMember().getIdLong(), Collections.singleton(Permission.MESSAGE_WRITE), null).queue();
                 query.getTextChannel().sendMessage("Channel created. Please follow the example channel to get the best results.").queue();
             }
