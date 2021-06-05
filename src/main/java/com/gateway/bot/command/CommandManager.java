@@ -44,8 +44,6 @@ public class CommandManager extends ListenerAdapter {
                                 if(command.identifierMatches(queryIdentifier)){
                                     if(!command.modCommand()){
                                         command.onUse(query, fullQuery, CommandManager.this);
-                                    } else if(command.modCommand() && accountManager.isCouncil(query.getAuthor().getId())){
-                                        command.onUse(query, fullQuery, CommandManager.this);
                                     }
                                 }
                             }
