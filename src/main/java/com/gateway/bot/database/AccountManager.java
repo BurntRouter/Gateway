@@ -1,12 +1,8 @@
 package com.gateway.bot.database;
 
-import net.dv8tion.jda.api.entities.Message;
-
-import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class AccountManager {
     private MySQL mysql;

@@ -27,15 +27,15 @@ public class CommandManager extends ListenerAdapter {
         this.accountManager = accountManager;
     }
 
+    //Looks for a command to be executed and ensures it's not a bot user or a null/bad message.
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         Thread thread = new Thread(() -> {
             try {
                 query = event.getMessage();
                 String content = (query.getContentRaw().toLowerCase());
-                content = content.replaceFirst("/", "");
+                content = content.replaceFirst(prefix, "");
                 List<String> fullQuery = (Arrays.asList(content.split(" ")));
-
                 if(event.getMessage().getContentStripped().length() > 0) {
                     if(!event.getMessage().getAuthor().isBot()) {
                         if(event.getMessage().getContentStripped().toLowerCase().startsWith("/")){
@@ -47,6 +47,17 @@ public class CommandManager extends ListenerAdapter {
                                     }
                                 }
                             }
+                            //Prevents people from sending messages in ticket channels that aren't involved with them
+                        } else if(query.getCategory().getId().contains("849658284490752041")) {
+                                try{
+                                    if(query.getAuthor().getId().contains(this.accountManager.getFreelancer(query.getTextChannel().getId())) || query.getAuthor().getId().contains(this.accountManager.getTicketOwner(query.getTextChannel().getId())) || query.getMember().getPermissions().contains("MANAGE_CHANNELS")) {
+
+                                    } else {
+                                        query.delete().queue();
+                                    }
+                                } catch (Exception e) {
+                                    query.delete().queue();
+                                }
                         }
                     }
                 }

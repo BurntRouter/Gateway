@@ -2,7 +2,6 @@ package com.gateway.bot.command;
 
 import com.gateway.bot.database.AccountManager;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Invite;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
@@ -19,6 +18,7 @@ public class CommandTicket extends Command {
         this.accountManager = accountManager;
     }
 
+    //Used to create a ticket. When provided the needed information it will create a new channel for the creator to write up and provide the information to our database
     @Override
     public void onUse(Message query, List<String> arguments, CommandManager commandManager) throws Exception {
         String userid = Objects.requireNonNull(query.getMember()).getId();

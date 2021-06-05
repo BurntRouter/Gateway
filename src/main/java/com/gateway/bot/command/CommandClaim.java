@@ -13,10 +13,11 @@ public class CommandClaim extends Command{
         this.accountManager = accountManager;
     }
 
+    //Allows a freelancer to claim a ticket they would like to complete
     @Override
     public void onUse(Message query, List<String> arguments, CommandManager commandManager) throws Exception {
-        if(!this.accountManager.getTicketOwner(query.getTextChannel().getId()).contains(query.getId())){
-            if(this.accountManager.getFreelancer(query.getTextChannel().getId()).contains("null")) {
+        if(!this.accountManager.getTicketOwner(query.getTextChannel().getId()).contains(query.getAuthor().getId())){
+            if(this.accountManager.getFreelancer(query.getTextChannel().getId()) == null) {
                 this.accountManager.setFreelancer(query.getTextChannel().getId(), query.getAuthor().getId());
                 query.getTextChannel().sendMessage("You have claimed this ticket! To release the claim use `/release`").queue();
             } else {

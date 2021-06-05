@@ -2,13 +2,9 @@ package com.gateway.bot.command;
 
 import com.gateway.bot.database.AccountManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 
-import java.awt.*;
-import java.util.Collections;
+import java.awt.Color;
 import java.util.List;
 
 public class CommandClose extends Command {
@@ -19,6 +15,8 @@ public class CommandClose extends Command {
         this.accountManager = accountManager;
     }
 
+    //Closes a ticket, sends a review, and pays out if necessary
+    //TODO Check if payout is needed and perform it if so
     @Override
     public void onUse(Message query, List<String> arguments, CommandManager commandManager) throws Exception {
         String userid = query.getAuthor().getId();
