@@ -61,6 +61,7 @@ public class Bot extends Thread {
         this.commandManager.registerCommand(new CommandTicket(this.accountManager));
         this.commandManager.registerCommand(new CommandClose(this.accountManager));
         this.commandManager.registerCommand(new CommandClaim(this.accountManager));
+        this.commandManager.registerCommand(new CommandRelease(this.accountManager));
     }
 
     public void openDatabase() throws IOException, SQLException, ClassNotFoundException {

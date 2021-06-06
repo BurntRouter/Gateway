@@ -59,6 +59,7 @@ public class AccountManager {
         PreparedStatement preparedStatement = this.mysql.getStatement("DELETE FROM tickets WHERE channelid = ?");
         preparedStatement.setString(1, channelid);
         preparedStatement.executeUpdate();
+        preparedStatement.close();
     }
 
     public void setFreelancer(String channelid, String freelancerid) throws SQLException {
@@ -66,6 +67,7 @@ public class AccountManager {
         preparedStatement.setString(1, freelancerid);
         preparedStatement.setString(2, channelid);
         preparedStatement.executeUpdate();
+        preparedStatement.close();
     }
 
     public String getFreelancer(String channelid) throws SQLException {
@@ -94,6 +96,14 @@ public class AccountManager {
         resultSet.close();
         preparedStatement.close();
         return bounty;
+    }
+
+    public void setBounty(String channelid, int bounty) throws SQLException {
+        PreparedStatement preparedStatement = this.mysql.getStatement("UPDATE tickets SET bounty = ? WHERE channelid = ?");
+        preparedStatement.setInt(1, bounty);
+        preparedStatement.setString(2, channelid);
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
     }
 
     public MySQL getMysql() {
