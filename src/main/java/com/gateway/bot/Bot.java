@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -58,7 +59,8 @@ public class Bot extends Thread {
     }
 
     public void registerCommands(){
-        this.commandManager.registerCommand(new CommandTicket(this.accountManager));
+        this.api.getGuildById("849262611417923584").upsertCommand("ticket", "Used to create a new project. `/ticket my-project`").addOption(OptionType.STRING, "project-name", "What you would like your project channel to be called in discord.", true).queue();
+        this.api.updateCommands().complete();
         this.commandManager.registerCommand(new CommandClose(this.accountManager));
         this.commandManager.registerCommand(new CommandClaim(this.accountManager));
         this.commandManager.registerCommand(new CommandRelease(this.accountManager));
@@ -80,5 +82,6 @@ public class Bot extends Thread {
 
     private void connect(){
         this.api.addEventListener(this.commandManager);
+        this.api.addEventListener(new CommandTicket(this.accountManager));
     }
 }

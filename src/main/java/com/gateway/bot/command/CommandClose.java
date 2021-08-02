@@ -2,30 +2,33 @@ package com.gateway.bot.command;
 
 import com.gateway.bot.database.AccountManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.awt.Color;
-import java.util.List;
 
-public class CommandClose extends Command {
+public class CommandClose extends ListenerAdapter {
     private final AccountManager accountManager;
 
     public CommandClose(AccountManager accountManager) {
-        super(new String[] {"close"}, new String[] {"userid (optional)"}, null);
         this.accountManager = accountManager;
     }
 
     //Closes a ticket, sends a review, and pays out if necessary
     @Override
-    public void onUse(Message query, List<String> arguments, CommandManager commandManager) throws Exception {
-        String channelid = query.getTextChannel().getId();
+    public void onSlashCommand(SlashCommandEvent event) {
+        String channelid = event.getTextChannel().getId();
+        if(this.getTicketOwner(channelid) == event.getUser().getId() && ) {
+
+        }
+
         if(this.accountManager.getBounty(channelid) > 0) {
             try {
                 String creator = this.accountManager.getTicketOwner(channelid);
                 String freelancer = this.accountManager.getFreelancer(channelid);
                 int bounty = this.accountManager.getBounty(channelid);
 
-                if(query.getCategory().getId().contains("849658284490752041") && this.accountManager.getBalance(creator) >= bounty) {
+                if(event..getId().contains("849658284490752041") && this.accountManager.getBalance(creator) >= bounty) {
                     if(this.accountManager.getTicketOwner(channelid).contains(query.getAuthor().getId())) {
                         if(arguments.size() < 3) {
                             query.getTextChannel().sendMessage("Please include a rating on a scale of 1/10 as well as a review. Ex: `/close 10 Router did a great job at writing the bot!`").queue();
@@ -56,5 +59,25 @@ public class CommandClose extends Command {
         query.getTextChannel().delete().queue();
         }
 
+    }
+
+    public String getTicketOwner(String channelid) {
+        try {
+            return this.accountManager.getTicketOwner(channelid);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void completePayment(String channelid) {
+        try {
+            int bounty = this.accountManager.getBounty(channelid);
+            String owner = this.getTicketOwner(channelid);
+            String freelancer = this.accountManager.getFreelancer(channelid);
+            this.accountManager.updateBalance(owner, -bounty);
+            this.accountManager.updateBalance(freelancer, bounty);
+        } catch (Exception e) {
+
+        }
     }
 }
